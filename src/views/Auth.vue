@@ -31,10 +31,20 @@ import { useField, useForm } from 'vee-validate';
 export default {
 
     setup() {
+   
 
         const isTooManyAttempts = computed(() => submitCount.value >= 3)    
  
+     
+      
+
         const { handleSubmit, isSubmitting, submitCount} = useForm();
+
+        watch(isTooManyAttempts, val => {
+            if (val) {
+                setTimeout(() => submitCount.value = 0, 2000)
+            }
+        })
 
       const {value: email, errorMessage: emailError , handleBlur: emailBlur  } =  useField(
         'email',
