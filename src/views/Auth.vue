@@ -35,16 +35,18 @@ export default {
         yup
         .string()
         .trim()
-        .required()
-        .email()
+        .required( 'Введите email' )
+        .email('Введите корректный email')
     )
+         const MIN_PASSWORD_LENGTH = 6
+
       const { value: password, errorMessage: passwordError , handleBlur: passwordBlur  } =  useField(
         'password',
         yup
         .string()
         .trim()
-        .required()
-        .min(6)
+        .required('Введите пароль')
+        .min(MIN_PASSWORD_LENGTH, `Минимальная длина пароля ${MIN_PASSWORD_LENGTH} символов`)
     )
      
      const onSubmit = handleSubmit((values) => {
