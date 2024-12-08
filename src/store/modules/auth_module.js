@@ -1,21 +1,21 @@
-import { remove } from "@vue/shared"
+const TOKEN_KEY = 'jwt-token'
 
 export  default {
     namespaced: true,
     state() {
         return{
-             token: null,
+             token: localStorage.getItem(TOKEN_KEY)
         }
        
     },
     mutations: {
         setToken(state, token) {
             state.token = token
-            localStorage.setItem('jwt-token', token)
+            localStorage.setItem(TOKEN_KEY, token)
         },
         logout(state) {
             state.token = null
-            localStorage.removeItem('jwt-token') 
+            localStorage.removeItem(TOKEN_KEY) 
         
         }
     },
@@ -28,8 +28,8 @@ export  default {
         token(state) {
             return state.token
         },
-        isAuthenticated(state) {
-            return !!state.token
+        isAuthenticated(_, getters) {
+            return !!getters.token
         }
     },
     
