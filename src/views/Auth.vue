@@ -1,92 +1,74 @@
 <template>
-    <form class="card" @submit.prevent="onSubmit" >
+    <form class="card" @submit.prevent="onSubmit">
         <h1>Войти в систему</h1>
 
-        <div :class="['form-control', {invalid: emailError}]">
-
+        <div :class="['form-control', { invalid: emailError }]">
             <label for="email">Email</label>
             <input type="email" id="email" v-model="email" @blur="emailBlur">
             <small v-if="emailError">{{ emailError }}</small>
         </div>
 
-        <div :class="['form-control', {invalid: passwordError}]">
+        <div :class="['form-control', { invalid: passwordError }]">
             <label for="password">Пароль</label>
             <input type="password" id="password" v-model="password" @blur="passwordBlur">
             <small v-if="passwordError">{{ passwordError }}</small>
-        </div>  
-
-        <button class="btn primary" :disabled="isSubmitting || isTooManyAttempts" type="submit">Войти</button>
-        <div class="text-danger" v-if="isTooManyAttempts"> 
-            Слишком много попыток попробуйте позже
         </div>
 
+        <button class="btn primary" :disabled="isSubmitting || isTooManyAttempts" type="submit">Войти</button>
+        <div class="text-danger" v-if="isTooManyAttempts">
+            Слишком много попыток, попробуйте позже
+        </div>
     </form>
 </template>
 
 <script>
-import {computed, watch} from 'vue'
-import * as yup from 'yup'
+import { computed, watch } from 'vue';
+import * as yup from 'yup';
 import { useField, useForm } from 'vee-validate';
 
 export default {
-
     setup() {
-   
+        const { handleSubmit, isSubmitting, submitCount } = useForm();
 
-        const isTooManyAttempts = computed(() => submitCount.value >= 3)    
- 
-     
-      
+        const isTooManyAttempts = computed(() => submitCount.value >= 3);
 
-        const { handleSubmit, isSubmitting, submitCount} = useForm();
-
-        watch(isTooManyAttempts, val => {
+        watch(isTooManyAttempts, (val) => {
             if (val) {
-                setTimeout(() => submitCount.value = 0, 2000)
+                setTimeout(() => (submitCount.value = 0), 2000);
             }
-        })
+        });
 
-      const {value: email, errorMessage: emailError , handleBlur: emailBlur  } =  useField(
-        'email',
-        yup
-        .string()
-        .trim()
-        .required( 'Введите email' )
-        .email('Введите корректный email')
-    )
-         const MIN_PASSWORD_LENGTH = 6
+        const MIN_PASSWORD_LENGTH = 6;
 
-      const { value: password, errorMessage: passwordError , handleBlur: passwordBlur  } =  useField(
-        'password',
-        yup
-        .string()
-        .trim()
-        .required('Введите пароль')
-        .min(MIN_PASSWORD_LENGTH, `Минимальная длина пароля ${MIN_PASSWORD_LENGTH}  символов`)
-    )
-     
-     const onSubmit = handleSubmit((values) => {
-        
-     })
+        const { value: email, errorMessage: emailError, handleBlur: emailBlur } = useField(
+            'email',
+            yup.string().trim().required('Введите email').email('Введите корректный email')
+        );
 
-      return {
-        email,
-        emailError,
-        emailBlur,
-        password,
-        passwordError,
-        passwordBlur,
-        onSubmit,
-        isSubmitting,
-        isTooManyAttempts
+        const { value: password, errorMessage: passwordError, handleBlur: passwordBlur } = useField(
+            'password',
+            yup
+                .string()
+                .trim()
+                .required('Введите пароль')
+                .min(MIN_PASSWORD_LENGTH, `Минимальная длина пароля ${MIN_PASSWORD_LENGTH} символов`)
+        );
 
-      }
-    
-    }
+        const onSubmit = handleSubmit((values) => {});
 
-     
-    
-}
+        return {
+            email,
+            emailError,
+            emailBlur,
+            password,
+            passwordError,
+            passwordBlur,
+            onSubmit,
+            isSubmitting,
+            isTooManyAttempts,
+        };
+    },
+};
 </script>
 
 
