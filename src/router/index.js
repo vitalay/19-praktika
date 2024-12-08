@@ -7,7 +7,7 @@ const router = ({
     {
       path: '/',
       name: 'home',
-      component: Home,
+      component: () => import('../views/Home.vue'),
       meta: {
         layout: 'main'
       }
@@ -34,5 +34,7 @@ const router = ({
   ]
 
 })
+
+ 
 
 export default router
