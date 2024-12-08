@@ -15,20 +15,26 @@
             <small v-if="passwordError">{{ passwordError }}</small>
         </div>  
 
-        <button class="btn primary" type="submit">Войти</button>
+        <button class="btn primary" :disabled="isSubmitting || isTooManyAttempts" type="submit">Войти</button>
+        <div class="text-danger" v-if="isTooManyAttempts"> 
+            Слишком много попыток попробуйте позже
+        </div>
 
     </form>
 </template>
 
 <script>
+import {computed, watch} from 'vue'
 import * as yup from 'yup'
 import { useField, useForm } from 'vee-validate';
 
 export default {
 
     setup() {
+
+        const isTooManyAttempts = computed(() => submitCount.value >= 3)    
  
-        const { handleSubmit, isSubmitting} = useForm();
+        const { handleSubmit, isSubmitting, submitCount} = useForm();
 
       const {value: email, errorMessage: emailError , handleBlur: emailBlur  } =  useField(
         'email',
@@ -46,7 +52,7 @@ export default {
         .string()
         .trim()
         .required('Введите пароль')
-        .min(MIN_PASSWORD_LENGTH, `Минимальная длина пароля ${MIN_PASSWORD_LENGTH} символов`)
+        .min(MIN_PASSWORD_LENGTH, `Минимальная длина пароля ${MIN_PASSWORD_LENGTH}  символов`)
     )
      
      const onSubmit = handleSubmit((values) => {
@@ -60,7 +66,10 @@ export default {
         password,
         passwordError,
         passwordBlur,
-        onSubmit
+        onSubmit,
+        isSubmitting,
+        isTooManyAttempts
+
       }
     
     }
