@@ -16,7 +16,16 @@
 </template>
 
 <script>
+
+import { useRoute } from 'vue-router';
+import { useStore } from 'vuex';
+
 export default {
+
+  setup() {
+    const router = useRoute();
+    const store = useStore();
+  }
    
 };
 </script>
