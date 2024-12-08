@@ -1,15 +1,18 @@
 <template>
-    <form class="card" @submit.prevent >
+    <form class="card" @submit.prevent="onSubmit" >
         <h1>Войти в систему</h1>
 
-        <div class="form-control">
+        <div :class="['form-control', {invalid: emailError}]">
+
             <label for="email">Email</label>
-            <input type="email" id="email">
+            <input type="email" id="email" v-model="email" @blur="emailBlur">
+            <small v-if="emailError">{{ emailError }}</small>
         </div>
 
-        <div class="form-control">
+        <div :class="['form-control', {invalid: passwordError}]">
             <label for="password">Пароль</label>
-            <input type="password" id="password">
+            <input type="password" id="password" v-model="password" @blur="passwordBlur">
+            <small v-if="passwordError">{{ passwordError }}</small>
         </div>  
 
         <button class="btn primary" type="submit">Войти</button>
@@ -18,7 +21,47 @@
 </template>
 
 <script>
+import * as yup from 'yup'
+import { useField, useForm } from 'vee-validate';
+
 export default {
+
+    setup() {
+ 
+        const { handleSubmit, isSubmitting} = useForm();
+
+      const {value: email, errorMessage: emailError , handleBlur: emailBlur  } =  useField(
+        'email',
+        yup
+        .string()
+        .trim()
+        .required()
+        .email()
+    )
+      const { value: password, errorMessage: passwordError , handleBlur: passwordBlur  } =  useField(
+        'password',
+        yup
+        .string()
+        .trim()
+        .required()
+        .min(6)
+    )
+     
+     const onSubmit = handleSubmit((values) => {
+        
+     })
+
+      return {
+        email,
+        emailError,
+        emailBlur,
+        password,
+        passwordError,
+        passwordBlur,
+        onSubmit
+      }
+    
+    }
 
      
     
@@ -27,66 +70,79 @@ export default {
 
 
 <style scoped>
+/* Общие стили */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    margin: 0;
+}
+
+/* Стилизация карточки */
 .card {
-  max-width: 400px; /* Ограничиваем ширину формы */
-  margin: 2rem auto; /* Центруем форму на странице */
-  padding: 2rem; /* Внутренние отступы */
-  background-color: #fff; /* Фон формы */
-  border-radius: 8px; /* Скругленные углы */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень для эффекта объема */
-  box-sizing: border-box; /* Учитываем отступы и границы */
-  text-align: center; /* Выравниваем текст по центру */
+    width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 
-h1 {
-  font-size: 1.5rem; /* Размер заголовка */
-  margin-bottom: 1rem; /* Отступ снизу */
-  color: #333; /* Темный текст */
+/* Заголовок */
+.card h1 {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
+/* Поля ввода */
 .form-control {
-  margin-bottom: 1.5rem; /* Отступ между элементами формы */
-  text-align: left; /* Выравнивание текста меток */
+    margin-bottom: 15px;
 }
 
-label {
-  font-size: 0.9rem; /* Размер шрифта метки */
-  color: #555; /* Нейтральный цвет текста */
-  display: block; /* Метка занимает всю ширину строки */
-  margin-bottom: 0.5rem; /* Отступ снизу */
+.form-control label {
+    display: block;
+    margin-bottom: 5px;
 }
 
-input {
-  width: 100%; /* Поле ввода занимает всю ширину родителя */
-  padding: 0.8rem; /* Внутренние отступы */
-  border: 1px solid #ccc; /* Цвет рамки */
-  border-radius: 4px; /* Скругленные углы */
-  font-size: 1rem; /* Размер шрифта */
-  box-sizing: border-box; /* Учитываем отступы и границы */
-  transition: border-color 0.3s ease; /* Плавный переход для фокуса */
+.form-control input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-input:focus {
-  border-color: #007bff; /* Цвет рамки при фокусе */
-  outline: none; /* Убираем стандартный фокус */
+/* Ошибки */
+.invalid input {
+    border-color: red;
 }
 
+.form-control small {
+    color: red;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Кнопка */
 .btn {
-  width: 100%; /* Кнопка занимает всю ширину формы */
-  padding: 0.8rem; /* Внутренние отступы */
-  font-size: 1rem; /* Размер шрифта */
-  border: none; /* Убираем рамку */
-  border-radius: 4px; /* Скругленные углы */
-  cursor: pointer; /* Указатель при наведении */
-  transition: background-color 0.3s ease; /* Плавный переход для цвета */
+    padding: 12px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
-.btn.primary {
-  background-color: #007bff; /* Основной цвет кнопки */
-  color: #fff; /* Белый текст */
+.primary {
+    background-color: #007bff;
+    color: white;
 }
 
-.btn.primary:hover {
-  background-color: #0056b3; /* Более темный цвет при наведении */
+.primary:hover {
+    background-color: #0056b3;
 }
+
 </style>
