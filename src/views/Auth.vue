@@ -22,52 +22,15 @@
 </template>
 
 <script>
-import { computed, watch } from 'vue';
-import * as yup from 'yup';
-import { useField, useForm } from 'vee-validate';
+
+import { useLoginForm } from '@/use/login-form';
 
 export default {
     setup() {
-        const { handleSubmit, isSubmitting, submitCount } = useForm();
-
-        const isTooManyAttempts = computed(() => submitCount.value >= 3);
-
-        watch(isTooManyAttempts, (val) => {
-            if (val) {
-                setTimeout(() => (submitCount.value = 0), 2000);
-            }
-        });
-
-        const MIN_PASSWORD_LENGTH = 6;
-
-        const { value: email, errorMessage: emailError, handleBlur: emailBlur } = useField(
-            'email',
-            yup.string().trim().required('Введите email').email('Введите корректный email')
-        );
-
-        const { value: password, errorMessage: passwordError, handleBlur: passwordBlur } = useField(
-            'password',
-            yup
-                .string()
-                .trim()
-                .required('Введите пароль')
-                .min(MIN_PASSWORD_LENGTH, `Минимальная длина пароля ${MIN_PASSWORD_LENGTH} символов`)
-        );
-
-        const onSubmit = handleSubmit((values) => {});
-
         return {
-            email,
-            emailError,
-            emailBlur,
-            password,
-            passwordError,
-            passwordBlur,
-            onSubmit,
-            isSubmitting,
-            isTooManyAttempts,
-        };
-    },
+            ...useLoginForm()
+        }
+    }
 };
 </script>
 
