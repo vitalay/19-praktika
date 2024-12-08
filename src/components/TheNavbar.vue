@@ -21,45 +21,49 @@ export default {
 };
 </script>
 
-<style scoped>  
-/* Общие стили */
-body {
-  font-family: Arial, sans-serif;
-}
-
-/* Навигационное меню */
+<style scoped>
 .navbar {
-  background-color: #f8f9fa;
-  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #2a2a72;
+  color: #fff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .navbar h3 {
   margin: 0;
-  color: #212529;
+  font-size: 1.5rem;
 }
 
-.navbar ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+.navbar-menu {
   display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.navbar li {
-  margin-left: 15px;
+.navbar-menu li {
+  margin-left: 1.5rem;
 }
 
-.navbar a {
+.navbar-menu a {
   text-decoration: none;
-  color: #007bff;
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 4px;
 }
 
-.navbar a:hover {
-  text-decoration: underline;
+.navbar-menu a:hover {
+  background-color: #fff;
+  color: #2a2a72;
 }
 
-
+.navbar-menu .router-link-active {
+  background-color: #fff;
+  color: #2a2a72;
+}
 </style>

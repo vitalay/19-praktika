@@ -1,40 +1,35 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
+import { createRouter, createWebHistory } from 'vue-router';
 
-const router = ({
-
-  routes: [
-    {
+const routes = [
+  {
       path: '/',
       name: 'home',
       component: () => import('../views/Home.vue'),
       meta: {
-        layout: 'main'
+          layout: 'main'
       }
-    },
-    {
+  },
+  {
       path: '/help',
       name: 'help',
       component: () => import('../views/Help.vue'),
       meta: {
-        layout: 'main'
+          layout: 'main'
       }
-    },
-    {
+  },
+  {
       path: '/Auth',
       name: 'Auth',
       component: () => import('../views/Auth.vue'),
       meta: {
-        layout: 'auth'
+          layout: 'auth'
       }
-    },
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-  ]
+  },
+]
 
-})
+const router = createRouter({
+  history: createWebHistory('/19-praktika'),
+  routes,
+});
 
- 
-
-export default router
+export default router;
